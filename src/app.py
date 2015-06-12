@@ -143,7 +143,7 @@ def login():
         'authTokenDisplayData': pretty_encode(auth_token),
         'userData': pretty_encode(user['username']),
         'phoneNumber': user['phone_number'],
-        'webrtcEnv': app.config['WEBRTC_ENV'],
+        'webrtcEnv': '',
         'domain': endpoint.credentials['realm']
     }
 
@@ -212,6 +212,7 @@ def handle_incoming_call(event, user):
                            tag=call.call_id, callback_url=url)
 
     cache.set('call_bridge:%s' % new_call.call_id, bridge.id, timeout=86400)
+    cache.set('call_bridge:%s' % call.call_id, bridge.id, timeout=86400)
 
 
 def handle_hangup(event):
@@ -221,17 +222,17 @@ def handle_hangup(event):
     :return:
     """
     bridge_id = cache.get('call_bridge:%s' % event.call_id)
-    if bridge_id:
+    if bridge_id is None:
         # call was not on a bridge no action is needed
         app.logger.debug('no cached bridge for call_id=%s' % event.call_id)
         return
 
     # Delete all active calls in bridge
-    calls = Bridge.get(bridge_id).calls
-    calls = [c for c in calls if not c.state == Call.STATES.active]
+    calls = Bridge.get(bridge_id).fetch_calls()
+    calls = [c for c in calls if c.state == Call.STATES.active]
     for call in calls:
         app.logger.debug('hanging up call=%s' % call)
-        Call.get(call.id).hangup()
+        call.hangup()
         cache.delete('call_bridge:%s' % call.call_id)
 
 
