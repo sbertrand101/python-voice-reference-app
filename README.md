@@ -30,8 +30,8 @@ pip install -r requirements.txt
 Run your server locally and and expose it to the internet (even behind a
 NAT or firewall) via [ngrok](https://ngrok.com/).
 
+ * Follow the instructions from the installation section
  * Install [ngrok](https://ngrok.com/download)
- * Follow the installation steps above.
  * Start an ngrok tunnel `ngrok http 5000`
  * Start the app `source venv/bin/activate && cd src && python app.py`
  * Visit the your ngrok url e.g. http://6199623a.ngrok.io
