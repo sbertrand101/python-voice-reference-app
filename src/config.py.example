@@ -1,0 +1,18 @@
+# The name and port number of the server
+SERVER_NAME = '127.0.0.1:5000'
+
+# Domain name for sip.  For demo use this can be an arbitrary domain name.
+DOMAIN = 'example.com'
+
+# Set to true to enable web debugging.  Be careful as this feature will dump
+# stack traces that may contain sensitive data when errors happen.
+DEBUG = False
+
+# Your Catapult API User
+CATAPULT_USER_ID = 'u-'
+
+# Your Catapult API Token
+CATAPULT_API_TOKEN = 't-'
+
+# Your Catapult API Secret
+CATAPULT_API_SECRET = ''

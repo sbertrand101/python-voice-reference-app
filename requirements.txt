@@ -1,0 +1,9 @@
+-e git+https://github.com/bandwidthcom/python-bandwidth.git@458fe598a06fbf0a4e833330c332c75bf751625f#egg=bandwidth_sdk-master
+Flask==0.10.1
+itsdangerous==0.24
+Jinja2==2.7.3
+MarkupSafe==0.23
+python-dateutil==2.4.2
+requests==2.7.0
+six==1.9.0
+Werkzeug==0.10.4

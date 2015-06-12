@@ -1,0 +1,6 @@
+*.pyc
+.idea
+*.iml
+venv
+config.py
+cache.p
