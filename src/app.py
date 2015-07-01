@@ -74,6 +74,20 @@ def pretty_encode(resource):
     return json.dumps(resource, indent=3, cls=PrettyEncoder)
 
 
+def format_user(user):
+    """
+    Return a json serializable user representation.
+    :param user:
+    :return:
+    """
+    endpoint = Endpoint.get(domain.id, user.get('endpoint_id'))
+    return {
+        'username': user.get('username'),
+        'phoneNumber': user.get('phone_number'),
+        'endpoint': {attr: getattr(endpoint, attr) for attr in endpoint._fields}
+    }
+
+
 def get_user(user):
     """
     Get a user and config.  First attempts to pull a user from the cache.
@@ -234,6 +248,54 @@ def handle_hangup(event):
         app.logger.debug('hanging up call=%s' % call)
         call.hangup()
         cache.delete('call_bridge:%s' % call.call_id)
+
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    if not request.json:
+        abort(403)
+    if 'userName' not in request.json or 'password' not in request.json:
+        abort(403)
+    user = {
+        'username': request.json.get('userName'),
+        'password': request.json.get('password')
+    }
+    data = json.dumps(format_user(get_user(user)))
+    return data, 201, {'Content-Type': 'application/json'}
+
+
+@app.route('/users/<username>', methods=['GET'])
+def fetch_user(username=None):
+    user = cache.get('user:%s' % username)
+    if not user:
+        abort(404)
+    return format_user(user), 200, {'Content-Type': 'application/json'}
+
+
+@app.route('/users/<username>', methods=['DELETE'])
+def delete_user(username=None):
+    user = cache.get('user:%s' % username)
+    if user is None:
+        abort(404)
+    PhoneNumber.get(user.get('phone_number_id')).delete()
+    cache.delete('user:%s' % username)
+    persist_cache()
+    return '', 200
+
+
+@app.route('/users/<username>', methods=['PUT'])
+def update_user(username=None):
+    # Note: PUT user schema must match internal cache representation of
+    # users which is not the same format that is returned by GET user.
+    user = cache.get('user:%s' % username)
+    if user is None:
+        abort(404)
+    if not request.json:
+        abort(403)
+    user.update(request.json)
+    cache.set('user:%s' % username, user)
+    persist_cache()
+    return '', 200
 
 
 if __name__ == '__main__':
