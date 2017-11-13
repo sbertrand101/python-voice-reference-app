@@ -1,4 +1,9 @@
-# python-voice-reference-app
+<div align="center">
+
+# Python Voice Reference App
+
+<a href="http://dev.bandwidth.com"><img src="https://s3.amazonaws.com/bwdemos/BW_Voice.png"/></a>
+</div>
 
 This application demonstrates how to implement voice calling for mobile
 devices, browsers (WebRTC), and any SIP client using the Bandwidth Application
