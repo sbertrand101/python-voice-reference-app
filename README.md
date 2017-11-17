@@ -5,6 +5,10 @@
 <a href="http://dev.bandwidth.com"><img src="https://s3.amazonaws.com/bwdemos/BW_Voice.png"/></a>
 </div>
 
+<div align="center"> 
+<b>This application is outdated, but will be updated soon!</b><br><br>
+</div> 
+
 This application demonstrates how to implement voice calling for mobile
 devices, browsers (WebRTC), and any SIP client using the Bandwidth Application
 Platform. This reference application makes creating, registering, and
